@@ -460,6 +460,8 @@ class MprisObject(dbus.service.Object):
             '%s.ActivatePlaylist(%r) called', PLAYLISTS_IFACE, playlist_id)
         playlist_uri = self.get_playlist_uri(playlist_id)
         playlist = self.core.playlists.lookup(playlist_uri).get()
+        if self.config['mpris']['auto_clear']:
+            self.core.tracklist.clear()
         if playlist and playlist.tracks:
             tl_tracks = self.core.tracklist.add(playlist.tracks).get()
             self.core.playback.play(tl_tracks[0])
